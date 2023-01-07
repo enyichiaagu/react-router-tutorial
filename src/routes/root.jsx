@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
-import { Form, NavLink, Outlet, redirect, useLoaderData, useNavigation } from 'react-router-dom'
+import { Form, NavLink, Outlet, redirect, useLoaderData, useNavigation, useSubmit } from 'react-router-dom'
 
 import { getContacts, createContact } from '../contacts'
 
@@ -20,9 +20,12 @@ export default function Root() {
 
     const { contacts, q } = useLoaderData()
     let navigation = useNavigation()
+    let submit = useSubmit()
+
+    let [ query, setQuery ] = useState(q)
 
     useEffect(() => {
-      document.getElementById('q').value = q;
+      setQuery(q)
     }, [q])
 
     return (
@@ -30,13 +33,20 @@ export default function Root() {
         <div id="sidebar">
           <h1>React Router Contacts</h1>
           <div>
-            <Form id="search-form" role="search">
+            <Form 
+              id="search-form" 
+              role="search" 
+              onChange={(event) => submit(event.currentTarget)} 
+              onSubmit={(event) => event.preventDefault()}
+            >
               <input
                 id="q"
                 aria-label="Search contacts"
                 placeholder="Search"
                 type="search"
                 name="q"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
                 defaultValue={q}
               />
               <div
