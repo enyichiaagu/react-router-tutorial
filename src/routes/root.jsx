@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { Form, NavLink, Outlet, redirect, useLoaderData, useNavigation } from 'react-router-dom'
+import { Form, NavLink, Outlet, redirect, useLoaderData, useNavigation, useSubmit } from 'react-router-dom'
 
 import { getContacts, createContact } from '../contacts'
 
@@ -20,17 +20,27 @@ export default function Root() {
 
     const { contacts, q } = useLoaderData()
     let navigation = useNavigation()
+    let submit = useSubmit()
 
     useEffect(() => {
-      document.getElementById('q').value = q;
+      document.getElementById('q').value = q
     }, [q])
+
+    useEffect(() => {
+      console.log('component updates')
+    })
 
     return (
       <>
         <div id="sidebar">
           <h1>React Router Contacts</h1>
           <div>
-            <Form id="search-form" role="search">
+            <Form 
+              id="search-form" 
+              role="search" 
+              onChange={(event) => console.log('changed')} 
+              onSubmit={(event) => event.preventDefault()}
+            >
               <input
                 id="q"
                 aria-label="Search contacts"
