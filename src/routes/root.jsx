@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Form, NavLink, Outlet, redirect, useLoaderData, useNavigation, useSubmit } from 'react-router-dom'
 
@@ -22,13 +22,11 @@ export default function Root() {
     let navigation = useNavigation()
     let submit = useSubmit()
 
-    useEffect(() => {
-      document.getElementById('q').value = q
-    }, [q])
+    let [ query, setQuery ] = useState(q)
 
     useEffect(() => {
-      console.log('component updates')
-    })
+      setQuery(q)
+    }, [q])
 
     return (
       <>
@@ -38,7 +36,7 @@ export default function Root() {
             <Form 
               id="search-form" 
               role="search" 
-              onChange={(event) => console.log('changed')} 
+              onChange={(event) => submit(event.currentTarget)} 
               onSubmit={(event) => event.preventDefault()}
             >
               <input
@@ -47,6 +45,8 @@ export default function Root() {
                 placeholder="Search"
                 type="search"
                 name="q"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
                 defaultValue={q}
               />
               <div
