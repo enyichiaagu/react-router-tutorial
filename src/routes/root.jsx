@@ -36,7 +36,6 @@ export default function Root() {
             <Form 
               id="search-form" 
               role="search" 
-              onChange={(event) => submit(event.currentTarget)} 
               onSubmit={(event) => event.preventDefault()}
             >
               <input
@@ -45,9 +44,8 @@ export default function Root() {
                 placeholder="Search"
                 type="search"
                 name="q"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                defaultValue={q}
+                value={query || ''}
+                onChange={(event) => submit(event.currentTarget.form)}
               />
               <div
                 id="search-spinner"
@@ -96,4 +94,4 @@ export default function Root() {
         </div>
       </>
     );
-  }
+}
