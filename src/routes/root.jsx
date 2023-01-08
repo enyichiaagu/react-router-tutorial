@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect} from 'react'
 
 import { Form, NavLink, Outlet, redirect, useLoaderData, useNavigation, useSubmit } from 'react-router-dom'
 
@@ -22,10 +22,10 @@ export default function Root() {
     let navigation = useNavigation()
     let submit = useSubmit()
 
-    let [ query, setQuery ] = useState(q)
+    const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q')
 
     useEffect(() => {
-      setQuery(q)
+      document.getElementById('q').value = q
     }, [q])
 
     return (
@@ -35,22 +35,27 @@ export default function Root() {
           <div>
             <Form 
               id="search-form" 
-              role="search" 
-              onSubmit={(event) => event.preventDefault()}
+              role="search"
             >
               <input
                 id="q"
+                className={searching ? "loading" : ""}
                 aria-label="Search contacts"
                 placeholder="Search"
                 type="search"
                 name="q"
-                value={query || ''}
-                onChange={(event) => submit(event.currentTarget.form)}
+                defaultValue={q}
+                onChange={(event) => {
+                  const isFirstSearch = q == null
+                  submit(event.currentTarget.form, {
+                    replace: !isFirstSearch
+                  })
+                }}
               />
               <div
                 id="search-spinner"
                 aria-hidden
-                hidden={true}
+                hidden={!searching}
               />
               <div
                 className="sr-only"
